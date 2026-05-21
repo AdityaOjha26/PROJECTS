@@ -22,25 +22,20 @@ void setup() {
   
   dht.begin();
   delay(3000); 
-  // No conversational headers here; we want the Python script to receive pure data lines immediately
 }
 
 void loop() {
   float h = dht.readHumidity();
   float t = dht.readTemperature();
 
-  // If reading fails, skip this loop iteration quietly so it doesn't break the Python float parser
-  if (isnan(h) || isnan(t)) {
+    if (isnan(h) || isnan(t)) {
     return;
   }
 
-  // --- AI DATA PIPELINE OUTPUT ---
-  // Outputs pure CSV format: Temperature,Humidity (e.g., "26.50,45.20")
   Serial.print(t);
   Serial.print(",");
   Serial.println(h);
 
-  // --- YOUR LOCAL HARDWARE SAFETY LOGIC ---
   if (t >= TEMP_CRIT) {
     digitalWrite(critColor, HIGH);
     digitalWrite(warnColor, LOW);
